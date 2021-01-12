@@ -11,9 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
+#7. The above line will set up NodeJS (the latest version ) because we are deploying a VueJS project. 
+      - run: npm install
+#8 At this point, Github Action has spun out a Ubuntu Virtual Machine, installed all its dependencies plus Node in above line and the above line installs all the dependencies of your projects
       - run: npm run build
+#9 Runs the build for the project; creating a /dist folder at the root with is uploaded to Firebase
+      - uses: w9jds/firebase-action@master
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
+          args: deploy --only hosting
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BMA_PROJECT_1319C }}'
           channelId: live
